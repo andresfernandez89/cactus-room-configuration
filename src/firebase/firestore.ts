@@ -1,18 +1,26 @@
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
 import app from "./firebaseConfig";
 
 const db = getFirestore(app);
+
 async function getPoints() {
   const querySnapshot = await getDocs(collection(db, "points"));
-  const points = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    data: doc.data(),
-  }));
+  const points = querySnapshot.docs.map((doc) => doc);
   return points;
 }
 
-async function getMaterials() {
-  const querySnapshot = await getDocs(collection(db, "materials"));
+async function getMaterials(pointId: string) {
+  const q = query(
+    collection(db, "materials"),
+    where("points", "array-contains", pointId),
+  );
+  const querySnapshot = await getDocs(q);
   const materials = querySnapshot.docs.map((doc) => doc.data());
   return materials;
 }
