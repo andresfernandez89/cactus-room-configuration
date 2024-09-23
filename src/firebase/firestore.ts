@@ -11,4 +11,10 @@ async function getPoints() {
   return points;
 }
 
-export { getPoints };
+async function getMaterials() {
+  const querySnapshot = await getDocs(collection(db, "materials"));
+  const materials = querySnapshot.docs.map((doc) => doc.data());
+  return materials;
+}
+
+export { getMaterials, getPoints };
