@@ -21,22 +21,45 @@ const RoomConfigurator: React.FC = () => {
       if (context instanceof CanvasRenderingContext2D) {
         const baseImage = new window.Image();
         baseImage.src = "/images/base.webp";
+        const svgImage = new window.Image();
+        svgImage.src = "/icons/fingerprintIcon.svg";
 
         baseImage.onload = () => {
+          // base image
           context.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
-          console.log(points);
-          points.forEach((point) => {
-            const coordX = (point.coordX * canvas.width) / 100;
-            const coordY = (point.coordY * canvas.height) / 100;
-            context.fillStyle = "red";
-            context.beginPath();
-            context.arc(coordX, coordY, 15, 0, 2 * Math.PI);
-            context.fill();
-            context.fillStyle = "white";
-            context.beginPath();
-            context.arc(coordX, coordY, 15 / 2, 0, 2 * Math.PI);
-            context.fill();
-          });
+
+          svgImage.onload = () => {
+            points.forEach((point) => {
+              const coordX = (point.coordX * canvas.width) / 100;
+              const coordY = (point.coordY * canvas.height) / 100;
+
+              // outer ring
+              context.globalAlpha = 0.6;
+              context.beginPath();
+              context.arc(coordX + 15, coordY + 15, 28, 0, 2 * Math.PI);
+              context.fillStyle = "#333";
+              context.fill();
+
+              // white ring
+              context.globalAlpha = 0.6;
+              context.beginPath();
+              context.arc(coordX + 15, coordY + 15, 25, 0, 2 * Math.PI);
+              context.lineWidth = 2;
+              context.strokeStyle = "white";
+              context.stroke();
+
+              // Inner circle
+              context.globalAlpha = 0.2;
+              context.beginPath();
+              context.arc(coordX + 15, coordY + 15, 20, 0, 2 * Math.PI);
+              context.fillStyle = "#94a3b8";
+              context.fill();
+              context.globalAlpha = 0.6;
+
+              //svg fingerprint
+              context.drawImage(svgImage, coordX, coordY, 30, 30);
+            });
+          };
         };
       }
     }
