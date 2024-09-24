@@ -9,9 +9,19 @@ import app from "./firebaseConfig";
 
 const db = getFirestore(app);
 
-async function getPoints() {
+type Point = {
+  coordX: number;
+  coordY: number;
+  name: string;
+};
+
+async function getPoints(): Promise<Point[]> {
   const querySnapshot = await getDocs(collection(db, "points"));
-  const points = querySnapshot.docs.map((doc) => doc);
+  const points: Point[] = querySnapshot.docs.map((doc) => ({
+    coordX: doc.data().coordX,
+    coordY: doc.data().coordY,
+    name: doc.data().name,
+  }));
   return points;
 }
 
