@@ -1,20 +1,12 @@
 "use client";
-import { getPoints } from "@/firebase/firestore";
-import { useEffect, useRef, useState } from "react";
-
-type Point = {
-  coordX: number;
-  coordY: number;
-  name: string;
-};
+import { useEffect, useRef } from "react";
+import usePoints from "../hooks/usePoints";
 
 const RoomConfigurator: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [points, setPoints] = useState<Point[]>([]);
+  const points = usePoints();
 
   useEffect(() => {
-    getPoints().then((p: Point[]) => setPoints(p));
-
     const canvas = canvasRef.current;
     if (canvas) {
       const context = canvas.getContext("2d");
