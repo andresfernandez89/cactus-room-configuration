@@ -10,6 +10,7 @@ import app from "./firebaseConfig";
 const db = getFirestore(app);
 
 type Point = {
+  id: string;
   coordX: number;
   coordY: number;
   name: string;
@@ -18,6 +19,7 @@ type Point = {
 async function getPoints(): Promise<Point[]> {
   const querySnapshot = await getDocs(collection(db, "points"));
   const points: Point[] = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
     coordX: doc.data().coordX,
     coordY: doc.data().coordY,
     name: doc.data().name,
@@ -31,7 +33,18 @@ async function getMaterials(pointId: string) {
     where("points", "array-contains", pointId),
   );
   const querySnapshot = await getDocs(q);
-  const materials = querySnapshot.docs.map((doc) => doc.data());
+
+  const materials = querySnapshot.docs.map((doc) => {
+    const data = doc.data();
+    const layerUrls = data.layers;
+    const layerUrl = layerUrls[pointId];
+
+    return {
+      ...data,
+      layerUrl: layerUrl || null,
+    };
+  });
+
   return materials;
 }
 
