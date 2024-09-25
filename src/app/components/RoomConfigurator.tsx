@@ -1,6 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { Material } from "../hooks/useMaterials";
+//import usePoints from "../hooks/usePoints";
+//import useMaterials from "../hooks/useMaterials";
 
 const RoomConfigurator = () => {
   const points = [
@@ -29,7 +32,54 @@ const RoomConfigurator = () => {
       name: "Entrepaños",
     },
   ];
-
+  const materials = [
+    {
+      name: "Blanco Núbol",
+      materialPreview:
+        "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1566226732308_preview.jpeg?alt=media&token=20a9702b-652d-481d-96ee-91a214437150",
+      points: ["Ks5CthbPwAvd2TNxzHEl"],
+      layers: {
+        Ks5CthbPwAvd2TNxzHEl:
+          "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1566226732308_KTQyQxRXM6se2nREr5zZ-1591364026128-Ks5CthbPwAvd2TNxzHEl.png?alt=media&token=82e826b0-8eb0-41ad-b23d-0f9ca0c8f963",
+      },
+      layerUrl:
+        "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1566226732308_KTQyQxRXM6se2nREr5zZ-1591364026128-Ks5CthbPwAvd2TNxzHEl.png?alt=media&token=82e826b0-8eb0-41ad-b23d-0f9ca0c8f963",
+    },
+    {
+      name: "Roble Tierra",
+      layers: {
+        Ks5CthbPwAvd2TNxzHEl:
+          "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1563188186943_KTQyQxRXM6se2nREr5zZ-1591364026128-Ks5CthbPwAvd2TNxzHEl.png?alt=media&token=3a6562d6-916f-4fcf-a771-b28e450d2add",
+      },
+      materialPreview:
+        "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1563188186943_preview.jpeg?alt=media&token=f76c0914-2bfc-4055-9bc7-92a5a7b412bd",
+      points: ["Ks5CthbPwAvd2TNxzHEl"],
+      layerUrl:
+        "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1563188186943_KTQyQxRXM6se2nREr5zZ-1591364026128-Ks5CthbPwAvd2TNxzHEl.png?alt=media&token=3a6562d6-916f-4fcf-a771-b28e450d2add",
+    },
+    {
+      materialPreview:
+        "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1578585661748_preview.jpeg?alt=media&token=69c30089-df31-444d-b6b4-ebe3bb19a7bc",
+      name: "Etimoe Ice",
+      points: ["Ks5CthbPwAvd2TNxzHEl"],
+      layers: {
+        Ks5CthbPwAvd2TNxzHEl:
+          "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1578585661748_KTQyQxRXM6se2nREr5zZ-1591364026128-Ks5CthbPwAvd2TNxzHEl.png?alt=media&token=062b38ee-990f-4d61-897e-444359f3cd75",
+      },
+      layerUrl:
+        "https://firebasestorage.googleapis.com/v0/b/visualizer-new-devs-test.appspot.com/o/materials_1578585661748_KTQyQxRXM6se2nREr5zZ-1591364026128-Ks5CthbPwAvd2TNxzHEl.png?alt=media&token=062b38ee-990f-4d61-897e-444359f3cd75",
+    },
+  ];
+  //const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
+  const [selectedPoint, setSelectedPoint] = useState<string | null>(
+    "Ks5CthbPwAvd2TNxzHEl",
+  );
+  //const points = usePoints(); // Hook para obtener los puntos
+  //const materials = useMaterials(selectedPoint); // Hook para obtener los materiales
+  const [selectedLayer, setSelectedLayer] = useState<string | null>(null);
+  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(
+    null,
+  );
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
@@ -45,17 +95,38 @@ const RoomConfigurator = () => {
 
   useEffect(() => {
     updateImageDimensions();
-
     window.addEventListener("resize", updateImageDimensions);
-
     return () => {
       window.removeEventListener("resize", updateImageDimensions);
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedPoint) {
+      const material = materials.find((m) => m.points.includes(selectedPoint));
+      if (material) {
+        handleMaterialChange(material);
+      }
+    }
+  }, [selectedPoint]);
+
+  const handleMaterialChange = (material: Material) => {
+    console.log("Point:", selectedPoint);
+    console.log("Material:", material);
+
+    if (selectedPoint && material.layers[selectedPoint]) {
+      const layerUrl = material.layers[selectedPoint];
+      setSelectedLayer(layerUrl);
+      setSelectedMaterial((prevMaterial) =>
+        prevMaterial?.name === material.name ? null : material,
+      );
+    } else {
+      console.error("No layer found for the selected point");
+    }
+  };
   return (
-    <div className="w-full max-md:max-w-md md:max-w-6xl mx-auto">
-      <div className="relative">
+    <div className="w-full max-md:max-w-md md:max-w-7xl mx-auto md:grid md:grid-cols-6">
+      <div className="relative md:col-span-5">
         <Image
           ref={imageRef}
           src="/images/base.webp"
@@ -65,7 +136,16 @@ const RoomConfigurator = () => {
           height={873}
           priority
         />
-
+        {selectedLayer && (
+          <Image
+            src={selectedLayer}
+            alt="Selected Material"
+            className="absolute top-0 left-0"
+            style={{ width: "100%", height: "100%" }}
+            width={1240}
+            height={873}
+          />
+        )}
         {points.map((point) => (
           <div
             key={point.id}
@@ -89,6 +169,41 @@ const RoomConfigurator = () => {
           </div>
         ))}
       </div>
+
+      {materials.length > 0 && (
+        <section className="py-4">
+          <div className="flex flex-col">
+            {materials.map((material) => (
+              <div
+                key={material.name}
+                onClick={() => handleMaterialChange(material)}
+                className="flex items-center cursor-pointer py-1 rounded-md transition-all hover:bg-primary/5"
+              >
+                <div
+                  className={`relative h-12 w-12 rounded ${
+                    selectedMaterial?.name === material.name
+                      ? "ring-2 ring-primary"
+                      : ""
+                  }`}
+                >
+                  <Image
+                    src={material.materialPreview}
+                    alt={material.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded"
+                  />
+                </div>
+                {selectedMaterial?.name === material.name && (
+                  <p className="text-sm md:text-base px-3 content-center items-center font-semibold transition-all ring-2 ring-primary bg-white h-12 rounded-r-md text-black">
+                    {material.name}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 };
