@@ -1,5 +1,5 @@
 import { getPoints } from "@/firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Point = {
   id: string;
@@ -15,7 +15,9 @@ const usePoints = () => {
     getPoints().then((p) => setPoints(p));
   }, []);
 
-  return points;
+  const memoizedPoints = useMemo(() => points, [points]);
+
+  return memoizedPoints;
 };
 
 export default usePoints;
