@@ -5,20 +5,14 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { PointTypes } from "../types/firestore";
 import app from "./firebaseConfig";
 
 const db = getFirestore(app);
 
-type Point = {
-  id: string;
-  coordX: number;
-  coordY: number;
-  name: string;
-};
-
-async function getPoints(): Promise<Point[]> {
+async function getPoints(): Promise<PointTypes[]> {
   const querySnapshot = await getDocs(collection(db, "points"));
-  const points: Point[] = querySnapshot.docs.map((doc) => ({
+  const points: PointTypes[] = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     coordX: doc.data().coordX,
     coordY: doc.data().coordY,

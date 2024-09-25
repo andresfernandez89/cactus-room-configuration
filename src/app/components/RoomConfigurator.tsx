@@ -1,17 +1,17 @@
 "use client";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Material, useMaterials } from "../hooks/useMaterials";
+import { useMaterials } from "../hooks/useMaterials";
 import usePoints from "../hooks/usePoints";
+import { MaterialTypes } from "../types/firestore";
 
 const RoomConfigurator = () => {
   const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
   const points = usePoints();
   const materials = useMaterials(selectedPoint);
   const [selectedLayer, setSelectedLayer] = useState<string | null>(null);
-  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(
-    null,
-  );
+  const [selectedMaterial, setSelectedMaterial] =
+    useState<MaterialTypes | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
@@ -44,7 +44,7 @@ const RoomConfigurator = () => {
   }, [selectedPoint, materials]);
 
   const handleMaterialChange = useCallback(
-    (material: Material) => {
+    (material: MaterialTypes) => {
       if (selectedPoint && material.layers[selectedPoint]) {
         const layerUrl = material.layers[selectedPoint];
         setSelectedLayer(layerUrl);

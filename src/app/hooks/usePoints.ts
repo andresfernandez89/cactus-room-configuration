@@ -1,22 +1,14 @@
 import { getPoints } from "@/app/firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
-
-type Point = {
-  id: string;
-  coordX: number;
-  coordY: number;
-  name: string;
-};
+import { PointTypes } from "../types/firestore";
 
 const usePoints = () => {
-  const [points, setPoints] = useState<Point[]>([]);
-
+  const [points, setPoints] = useState<PointTypes[]>([]);
   useEffect(() => {
     getPoints().then((p) => setPoints(p));
   }, []);
 
   const memoizedPoints = useMemo(() => points, [points]);
-
   return memoizedPoints;
 };
 
