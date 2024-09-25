@@ -1,4 +1,4 @@
-import { getPoints } from "@/firebase/firestore";
+import { getPoints } from "@/app/firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 
 type Point = {

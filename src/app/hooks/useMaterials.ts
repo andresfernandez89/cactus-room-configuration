@@ -1,4 +1,4 @@
-import { getMaterials } from "@/firebase/firestore";
+import { getMaterials } from "@/app/firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 
 export interface Material {
