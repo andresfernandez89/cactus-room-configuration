@@ -109,13 +109,14 @@ const RoomConfigurator = () => {
                 width={20}
                 height={20}
                 className="p-1 cursor-pointer border-2 bg-[#475569] border-[#475569] opacity-50 rounded-full sm:h-[25px] sm:w-[25px] md:h-[40px] md:w-[40px] ring-2 ring-white ring-inset"
+                priority
               />
             </div>
           ))}
       </div>
 
       {materials.length > 0 && (
-        <section className="py-4 pl-4 flex flex-col md:mt-4">
+        <section className="py-4 md:pl-4 flex flex-col md:mt-4">
           {materials.map((material) => (
             <div
               key={material.name}
@@ -130,11 +131,11 @@ const RoomConfigurator = () => {
                   alt={material.name}
                   height={48}
                   width={48}
-                  className="rounded-l p-[2px] bg-white h-full w-auto md:min-w-[100px]"
+                  className="rounded-l p-[2px] bg-[#f8fafc] h-full w-auto min-w-[48px] md:min-w-[100px]"
                 />
               </div>
               {selectedMaterial?.name === material.name && (
-                <p className="text-sm p-3 font-medium content-center justify-center items-center text-center transition-all bg-white h-12 md:h-[100px] rounded-r text-black">
+                <p className="text-sm p-3 font-medium content-center justify-center items-center text-center transition-all bg-[#f8fafc] h-12 md:h-[100px] rounded-r text-black">
                   {material.name}
                 </p>
               )}
