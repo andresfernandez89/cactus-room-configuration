@@ -12,3 +12,9 @@ export type MaterialTypes = {
   points: string[];
   layerUrl: string;
 };
+
+export interface IMaterialSelectionProps {
+  materials: MaterialTypes[];
+  selectedMaterial: MaterialTypes | null;
+  onMaterialChange: (material: MaterialTypes) => void;
+}
