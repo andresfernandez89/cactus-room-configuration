@@ -144,6 +144,7 @@ const RoomConfigurator = () => {
             style={{ width: "100%", height: "100%" }}
             width={1240}
             height={873}
+            priority
           />
         )}
         {points.map((point) => (
@@ -171,37 +172,31 @@ const RoomConfigurator = () => {
       </div>
 
       {materials.length > 0 && (
-        <section className="py-4">
-          <div className="flex flex-col">
-            {materials.map((material) => (
+        <section className="py-4 pl-4 flex flex-col md:mt-4">
+          {materials.map((material) => (
+            <div
+              key={material.name}
+              onClick={() => handleMaterialChange(material)}
+              className="flex items-center cursor-pointer py-1 rounded transition-all hover:bg-primary/5"
+            >
               <div
-                key={material.name}
-                onClick={() => handleMaterialChange(material)}
-                className="flex items-center cursor-pointer py-1 rounded-md transition-all hover:bg-primary/5"
+                className={`relative h-12 w-12 rounded md:h-[100px] md:w-[100px]`}
               >
-                <div
-                  className={`relative h-12 w-12 rounded ${
-                    selectedMaterial?.name === material.name
-                      ? "ring-2 ring-primary"
-                      : ""
-                  }`}
-                >
-                  <Image
-                    src={material.materialPreview}
-                    alt={material.name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded"
-                  />
-                </div>
-                {selectedMaterial?.name === material.name && (
-                  <p className="text-sm md:text-base px-3 content-center items-center font-semibold transition-all ring-2 ring-primary bg-white h-12 rounded-r-md text-black">
-                    {material.name}
-                  </p>
-                )}
+                <Image
+                  src={material.materialPreview}
+                  alt={material.name}
+                  height={48}
+                  width={48}
+                  className="rounded-l p-[2px] bg-white h-full w-auto"
+                />
               </div>
-            ))}
-          </div>
+              {selectedMaterial?.name === material.name && (
+                <p className="text-sm p-3 font-medium content-center justify-center items-center text-center transition-all bg-white h-12 md:h-[100px] rounded-r text-black">
+                  {material.name}
+                </p>
+              )}
+            </div>
+          ))}
         </section>
       )}
     </div>
