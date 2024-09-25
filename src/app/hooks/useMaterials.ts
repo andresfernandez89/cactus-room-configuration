@@ -1,5 +1,5 @@
 import { getMaterials } from "@/firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export interface Material {
   layers: Record<string, string>;
@@ -14,13 +14,13 @@ const useMaterials = (pointId: string | null) => {
 
   useEffect(() => {
     if (pointId) {
-      getMaterials(pointId).then((m) => {
-        setMaterials(m as Material[]);
-      });
+      getMaterials(pointId).then((m) => setMaterials(m as Material[]));
     }
   }, [pointId]);
 
-  return materials;
+  const memoizedMaterials = useMemo(() => materials, [materials]);
+
+  return memoizedMaterials;
 };
 
 export { useMaterials };
