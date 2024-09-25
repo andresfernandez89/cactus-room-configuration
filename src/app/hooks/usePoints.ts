@@ -2,6 +2,7 @@ import { getPoints } from "@/firebase/firestore";
 import { useEffect, useState } from "react";
 
 type Point = {
+  id: string;
   coordX: number;
   coordY: number;
   name: string;
